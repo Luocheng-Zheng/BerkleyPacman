@@ -1,0 +1,81 @@
+def algDFS(problem):
+
+    nodelist = []
+    stack = util.Stack()
+    stack.push([(problem.getStartState(),[],[]),[]])
+
+    while not stack.isEmpty():
+        actual = stack.pop()
+        node, actions, cost = actual[0]
+        move = actual[1]
+        if problem.isGoalState(node):
+            return move
+
+        if not checkVisit(nodelist,node):
+            nodelist.append(node)
+            for node, actions, cost in problem.getSuccessors(node):
+                stack.push([(node,actions,cost),move + [actions]])
+
+def algDFS(problem):
+
+    stack = util.Stack()
+    stack.push([(problem.getStartState(),[],[]),[]])
+    visitats = set()
+
+    while not stack.isEmpty():
+        actual = stack.pop() #ha de saacarse asi, sino no se puede leer LA CACA
+        node, actions, cost = actual[0]
+        
+        if problem.isGoalState(node):
+            return actual[1]
+        
+        if node not in visitats:
+            visitats.add(node)
+            for _node, _actions, _cost in problem.getSuccessors(node):
+                aux = actual[1] + [_actions]
+                stack.push([(_node,_actions,_cost), aux])
+                
+    return False #solo llegamos aqui si el isEmpty se cumple   
+
+
+    cola = util.PriorityQueue()
+    moves = []
+    nodelist = []
+    cola.push((problem.getStartState(),[],[]),0)
+    moves.append([])
+
+    while not cola.isEmpty():
+        actual = cola.pop()
+        actual2 = moves.pop()
+        
+        if problem.isGoalState(actual[0]):
+            print moves
+        if not checkVisit(nodelist,actual[0]):
+            nodelist.append(actual[0])
+            for node, actions, cost in problem.getSuccessors(actual[0]):
+                cola.push((node,actions,cost),cost)
+                moves.append(actual2 + [actions])
+
+
+    cola = util.PriorityQueue()
+    cola.push((problem.getStartState(),[],[]),0)
+    moves = util.PriorityQueue()
+    costu = util.PriorityQueue()
+    moves.push([],0)
+    costu.push([],0)
+    nodelist = []
+
+    while not cola.isEmpty():
+        actual = cola.pop()
+        actual2 = moves.pop()
+        actual3 = costu.pop()
+        
+        if problem.isGoalState(actual[0]):
+            return actual2
+
+        if not checkVisit(nodelist,actual[0]):
+            nodelist.append(actual[0])
+            for node, actions, cost in problem.getSuccessors(actual[0]):
+                cola.push((node,actions,cost),[actual3] + [cost])
+                moves.push(actual2 + [actions],0)
+                costu.push([actual3] + [cost],0)
